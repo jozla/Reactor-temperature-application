@@ -1,0 +1,16 @@
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\bin\Debug\MeteringSimulator.exe.config
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\bin\Debug\MeteringSimulator.exe
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\bin\Debug\MeteringSimulator.pdb
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.csproj.AssemblyReference.cache
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.csproj.SuggestedBindingRedirects.cache
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MainWindow.g.cs
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\App.g.cs
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator_MarkupCompile.cache
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator_MarkupCompile.lref
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MainWindow.baml
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.g.resources
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.Properties.Resources.resources
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.csproj.GenerateResource.cache
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.csproj.CoreCompileInputs.cache
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.exe
+C:\Users\Zlatko\Downloads\PSI IUIS - PZ2 - Metering Simulator T7\MeteringSimulator - T7\MeteringSimulator\obj\Debug\MeteringSimulator.pdb

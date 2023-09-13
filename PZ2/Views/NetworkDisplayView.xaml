@@ -1,0 +1,436 @@
+﻿<UserControl x:Class="PZ2.Views.NetworkDisplayView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:z="clr-namespace:System.Windows;assembly=PresentationCore"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PZ2.Views"
+        xmlns:viewModel="clr-namespace:PZ2.ViewModel"
+        xmlns:model ="clr-namespace:PZ2.Model"
+        xmlns:behaviours="http://schemas.microsoft.com/xaml/behaviors"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        mc:Ignorable="d"
+        d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:NetworkDisplayViewModel />
+    </UserControl.DataContext>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="320" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <TreeView Name="listaReaktora" Grid.Column="0" Grid.RowSpan="2" Margin="5" ItemsSource="{Binding AllReactors}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseLeftButtonUp">
+                    <i:InvokeCommandAction Command="{Binding MouseLeftButtonUpCommand}" />
+                </i:EventTrigger>
+                <i:EventTrigger EventName="SelectedItemChanged">
+                    <i:InvokeCommandAction Command="{Binding SelectedItemChangedCommand}" CommandParameter="{Binding ElementName=listaReaktora}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type model:ReactorsByType}" ItemsSource="{Binding Reactors}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding Type}"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type model:ReactorModel}">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Type.Image}" Width="50" Margin="0,0,5,0" />
+                        <TextBlock Text="{Binding Name}" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
+        </TreeView>
+        <!-- Data Grid -->
+        <Canvas Grid.Row="0" Grid.Column="1" Name="lineCanvass">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="116" />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+
+                <!--1-->
+                <DockPanel Grid.Column="0" Grid.Row="0" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas1}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3" BorderBrush="{Binding BorderBrush}">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas1" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas1}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas1}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas1}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+                <!--2-->
+                <DockPanel Grid.Column="1" Grid.Row="0" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas2}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas2" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas2}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas2}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas2}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+                <!--3-->
+                <DockPanel Grid.Column="2" Grid.Row="0" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas3}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas3" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas3}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas3}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas3}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--4-->
+                <DockPanel Grid.Column="3" Grid.Row="0" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas4}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas4" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas4}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas4}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas4}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--5-->
+                <DockPanel Grid.Column="0" Grid.Row="1" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas5}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas5" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas5}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas5}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas5}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--6-->
+                <DockPanel Grid.Column="1" Grid.Row="1" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas6}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas6" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas6}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas6}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas6}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--7-->
+                <DockPanel Grid.Column="2" Grid.Row="1" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas7}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas7" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas7}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas7}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas7}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--8-->
+                <DockPanel Grid.Column="3" Grid.Row="1" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas8}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas8" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas8}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas8}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas8}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--9-->
+                <DockPanel Grid.Column="0" Grid.Row="3" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas9}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas9" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas9}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas9}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas9}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--10-->
+                <DockPanel Grid.Column="1" Grid.Row="3" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas10}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas10" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas10}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas10}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas10}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--11-->
+                <DockPanel Grid.Column="2" Grid.Row="3" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas11}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas11" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas11}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas11}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas11}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+
+                <!--12-->
+                <DockPanel Grid.Column="3" Grid.Row="3" Margin="5">
+                    <Button DockPanel.Dock="Bottom" Width="51" Height="30" HorizontalAlignment="Right" Margin="0,0,10,0" Command="{Binding ClearItemCommand}" CommandParameter="{x:Reference canvas12}">
+                        <materialDesign:PackIcon Kind="CardRemoveOutline" Height="20" Width="20" ToolTip="Press here to clear slot" ToolTipService.IsEnabled="{Binding IsToolTipVisible}" />
+                    </Button>
+                    <Border Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" BorderThickness="3">
+                        <Canvas Background="White" AllowDrop="True" Name="canvas12" Height="100" Width="100">
+                            <i:Interaction.Triggers>
+                                <i:EventTrigger EventName="Drop">
+                                    <i:InvokeCommandAction Command="{Binding ItemDroppedCommand}" CommandParameter="{Binding ElementName=canvas12}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseRightButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DrawLineCommand}" CommandParameter="{Binding ElementName=canvas12}"/>
+                                </i:EventTrigger>
+                                <i:EventTrigger EventName="MouseLeftButtonDown">
+                                    <i:InvokeCommandAction Command="{Binding DragCommand}" CommandParameter="{Binding ElementName=canvas12}"/>
+                                </i:EventTrigger>
+                            </i:Interaction.Triggers>
+                            <behaviours:Interaction.Triggers>
+                                <behaviours:EventTrigger EventName="DragOver">
+                                    <behaviours:InvokeCommandAction Command="{Binding CanvasDragOverCommand}" PassEventArgsToCommand="True"/>
+                                </behaviours:EventTrigger>
+                            </behaviours:Interaction.Triggers>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,0,0,50" Canvas.Right="0" Text=""/>
+                            <TextBlock FontSize="12" Margin="5,50,0,0" Canvas.Bottom="0" Text=""/>
+                        </Canvas>
+                    </Border>
+                </DockPanel>
+            </Grid>
+        </Canvas>
+        <materialDesign:PackIcon Kind="Help" Height="24" Width="24" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="center" Visibility="{Binding IsHelpVisible}"/>
+        <TextBlock Grid.Row="1" Margin="20,0,0,0" Grid.ColumnSpan="2" Text="You can drag entities from the TreeView on the left to the empty fields on the right and also between the fields by pressing the mouse button on the entity and holding it while dragging and then releasing the mouse button when your cursor is on the empty field." FontSize="15" TextWrapping ="Wrap" TextAlignment="Center" Visibility="{Binding IsHelpVisible}"></TextBlock>
+        <materialDesign:PackIcon Kind="Help" Height="24" Width="24" Grid.Row="2" Grid.ColumnSpan="2" VerticalAlignment="center" Visibility="{Binding IsHelpVisible}"/>
+        <TextBlock Margin="20,0,0,0" Grid.Row="2" Grid.ColumnSpan="2" Text="If the entity is in the field and the color around it is blue that means the temperature is in valid margins, otherwise, when the color is red that means the temperature is not in valid margins." FontSize="15" TextWrapping ="Wrap" TextAlignment="Center" Visibility="{Binding IsHelpVisible}"></TextBlock>
+        <materialDesign:PackIcon Kind="Help" Height="24" Width="24" Grid.Row="3" Grid.ColumnSpan="2" VerticalAlignment="center" Visibility="{Binding IsHelpVisible}"/>
+        <TextBlock Margin="20,0,0,0" Grid.Row="3" Grid.ColumnSpan="2" Text="You can also draw lines between entites by pressing the right click on one entity, then again right click on the other one and the line will appear." FontSize="15" TextWrapping ="Wrap" TextAlignment="Center" Visibility="{Binding IsHelpVisible}"></TextBlock>
+    </Grid>
+</UserControl>

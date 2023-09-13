@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<ArrayOfReactorModel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ReactorModel>
+    <ValidationErrors />
+    <IsValid>false</IsValid>
+    <Id>0</Id>
+    <Name>asd</Name>
+    <Type>
+      <Name>RTD</Name>
+      <Image>../../Assets/RTD.jpeg</Image>
+    </Type>
+    <Temperature>250</Temperature>
+  </ReactorModel>
+  <ReactorModel>
+    <ValidationErrors />
+    <IsValid>false</IsValid>
+    <Id>1</Id>
+    <Name>asdsdas</Name>
+    <Type>
+      <Name>RTD</Name>
+      <Image>../../Assets/RTD.jpeg</Image>
+    </Type>
+    <Temperature>159</Temperature>
+  </ReactorModel>
+  <ReactorModel>
+    <ValidationErrors />
+    <IsValid>false</IsValid>
+    <Id>2</Id>
+    <Name>a</Name>
+    <Type>
+      <Name>RTD</Name>
+      <Image>../../Assets/RTD.jpeg</Image>
+    </Type>
+    <Temperature>209</Temperature>
+  </ReactorModel>
+  <ReactorModel>
+    <ValidationErrors />
+    <IsValid>false</IsValid>
+    <Id>4</Id>
+    <Name>Nesto</Name>
+    <Type>
+      <Name>Thermopile</Name>
+      <Image>../../Assets/Thermopile.jpeg</Image>
+    </Type>
+    <Temperature>213</Temperature>
+  </ReactorModel>
+  <ReactorModel>
+    <ValidationErrors />
+    <IsValid>false</IsValid>
+    <Id>5</Id>
+    <Name>as</Name>
+    <Type>
+      <Name>RTD</Name>
+      <Image>../../Assets/RTD.jpeg</Image>
+    </Type>
+    <Temperature>368</Temperature>
+  </ReactorModel>
+</ArrayOfReactorModel>

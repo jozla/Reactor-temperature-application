@@ -1,0 +1,151 @@
+﻿<UserControl x:Class="PZ2.Views.NetworkEntitiesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PZ2.Views"
+        xmlns:viewModel="clr-namespace:PZ2.ViewModel"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        d:DesignHeight="750" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <viewModel:NetworkEntitiesViewModel />
+    </UserControl.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- FILTER -->
+        <ComboBox Grid.Row="0" Grid.Column="0"
+                  SelectedValuePath="Content"
+                  SelectedValue="{Binding Path=FilterType, Mode=TwoWay}" Margin="30,10,0,10" ToolTip="Chose the type here" ToolTipService.IsEnabled="{Binding IsToolTipVisible}">
+            <ComboBoxItem Content="Type"></ComboBoxItem>
+            <ComboBoxItem Content="RTD"></ComboBoxItem>
+            <ComboBoxItem Content="Thermopile"></ComboBoxItem>
+        </ComboBox>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Label Content="Id" Grid.Column="0" HorizontalContentAlignment="Right" VerticalAlignment="Center" />
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <RadioButton IsChecked="{Binding Path=FilterMode[0], Mode=TwoWay}">&lt;</RadioButton>
+                <RadioButton IsChecked="{Binding Path=FilterMode[1], Mode=TwoWay}">=</RadioButton>
+                <RadioButton IsChecked="{Binding Path=FilterMode[2], Mode=TwoWay}">&gt;</RadioButton>
+            </StackPanel>
+            <TextBox Text="{Binding FilterId, Mode=TwoWay}" Grid.Column="2" HorizontalContentAlignment="Left" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="Value must be a valid integer" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" Command="{Binding FilterCommand}" Margin="20" ToolTip="Press here to apply filters" ToolTipService.IsEnabled="{Binding IsToolTipVisible}">
+                <materialDesign:PackIcon Kind="Filter" Height="24" Width="24" />
+            </Button>
+            <Button Grid.Column="1" Command="{Binding ResetFilterCommand}" Margin="20" ToolTip="Press here to reset filters" ToolTipService.IsEnabled="{Binding IsToolTipVisible}">
+                <materialDesign:PackIcon Kind="FilterRemove" Height="24" Width="24" />
+            </Button>
+        </Grid>
+        
+        <!--HELP FILTER-->
+        <Grid Grid.Row="1" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="30, 10, 30, 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:PackIcon Kind="Help" Height="24" Width="24" Grid.Row="0"  VerticalAlignment="center" Visibility="{Binding IsHelpVisible}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="To apply filters select the type and then type in the ID whose value will be greater/less/equal based on the radio button selection. After that, just press the filter button." FontSize="15" TextWrapping ="Wrap" TextAlignment="Center"  Visibility="{Binding IsHelpVisible}"></TextBlock>
+        </Grid>
+        
+        <!-- TABLE -->
+        <DataGrid Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ItemsSource="{Binding ReactorList}" SelectedItem="{Binding SelectedReactor, Mode=TwoWay}" AutoGenerateColumns="False" IsReadOnly="True" BorderThickness="2" BorderBrush="LightGray" Margin="0,0,0,10">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="*" Header="Id"  Binding="{Binding Id}" />
+                <DataGridTextColumn Width="*" Header="Name"  Binding="{Binding Name}" />
+                <DataGridTextColumn Width="*" Header="Type"  Binding="{Binding Type.Name}" />
+                <DataGridTextColumn Width="*" Header="Temperature"  Binding="{Binding Temperature}" />
+                <DataGridTemplateColumn Width="*" Header="Delete">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Command="{Binding Path=DataContext.DeleteReactorCommand, RelativeSource= {RelativeSource FindAncestor, AncestorType={x:Type DataGrid}}}"
+                                Style="{StaticResource MaterialDesignRaisedButton}" Background="#00bcd4" ToolTip="Press here to delete item">
+                                <materialDesign:PackIcon Kind="Delete" Height="24" Width="24" />
+                            </Button>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <!-- ADD -->
+        <Grid Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Label Content="Id:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" />
+            <TextBox Text="{Binding CurrentReactor.Id, Mode=TwoWay}" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="Value must be a valid integer" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+            <TextBlock Text="{Binding CurrentReactor.ValidationErrors[Id]}" Grid.Row="1" Grid.Column="1" Foreground="Red" VerticalAlignment="Center" TextWrapping="Wrap"/>
+
+            <Label Content="Type:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" />
+            <ComboBox Grid.Row="2" Grid.Column="1"
+                    ItemsSource="{Binding Path=ReactorTypes}"
+                    DisplayMemberPath="Name"
+                    SelectedValuePath="Name"
+                    SelectedValue="{Binding Path=AddType}" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="Chose the type here" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+
+            <Label Content="Name:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,20,0" />
+            <TextBox Text="{Binding CurrentReactor.Name, Mode=TwoWay}" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,0,20,0" ToolTip="Enter the name here" ToolTipService.IsEnabled="{Binding IsToolTipVisible}"/>
+            <TextBlock Text="{Binding CurrentReactor.ValidationErrors[Name]}" Grid.Row="4" Grid.Column="1" Foreground="Red" VerticalAlignment="Center" />
+
+            <Image Grid.Row="0" Grid.RowSpan="5" Grid.Column="2" Grid.ColumnSpan="2" Height="150" Width="150" Source="{Binding CurrentReactor.Type.Image}" />
+            
+        </Grid>
+        <Button Grid.Row="3" Grid.Column="2" Command="{Binding AddReactorCommand}" Height="30" Width="90"
+                 ToolTip="Press here to add new reactor." ToolTipService.IsEnabled="{Binding IsToolTipVisible}">
+            <materialDesign:PackIcon Kind="Add" Height="24" Width="24" />
+        </Button>
+        
+        <!--HELP ADD-->
+        <Grid Grid.Row="4" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="30, 10, 30, 10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <materialDesign:PackIcon Kind="Help" Height="24" Width="24" Grid.Row="0" VerticalAlignment="center" Visibility="{Binding IsHelpVisible}"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" Text="To add a new item type in the ID, select the type and type in the name. After that, you will see the preview of the item based on its type on the image next to the form." FontSize="15" TextWrapping ="Wrap" TextAlignment="Center" Visibility="{Binding IsHelpVisible}"></TextBlock>
+        </Grid>
+    </Grid>
+</UserControl>
+
